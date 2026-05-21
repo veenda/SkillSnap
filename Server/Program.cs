@@ -11,6 +11,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 
+// Register the context and configure SQLite
+// Run EF Core commands: dotnet ef migrations add InitialCreate
+// dotnet ef database update
 builder.Services.AddDbContext<SkillSnapContext>(options =>
     options.UseSqlServer("Data Source=skillsnap.db"));
 

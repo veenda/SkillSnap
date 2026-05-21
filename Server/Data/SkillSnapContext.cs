@@ -7,11 +7,10 @@ namespace class SkillSnap.Server.Data;
 
 public classApplicationUser : IdentityUser {}
 
+// Configure EF Core
 namespace class SkillSnapContext : IdentityDbContext<ApplicationUser>
 {
-    public SkillSnapContext(DbContextOptions<SkillSnapContext> options) : base(options)
-    {}
-
+    public SkillSnapContext(DbContextOptions<SkillSnapContext> options) : base(options) { }
     public DbSet<PortfolioUser> PortfolioUsers { get; set; }
     public DbSet<Project> Projects { get; set; }
     public DbSet<Skill> Skills { get; set; }

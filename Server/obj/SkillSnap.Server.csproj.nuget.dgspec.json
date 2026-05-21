@@ -1,7 +1,7 @@
 {
   "format": 1,
   "restore": {
-    "D:\\SkillSnap\\server\\SkillSnap.Server.csproj": {}
+    "D:\\SkillSnap\\Server\\SkillSnap.Server.csproj": {}
   },
   "projects": {
     "D:\\SkillSnap\\Client\\SkillSnap.Client.csproj": {
@@ -83,14 +83,14 @@
         }
       }
     },
-    "D:\\SkillSnap\\server\\SkillSnap.Server.csproj": {
+    "D:\\SkillSnap\\Server\\SkillSnap.Server.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\SkillSnap\\server\\SkillSnap.Server.csproj",
+        "projectUniqueName": "D:\\SkillSnap\\Server\\SkillSnap.Server.csproj",
         "projectName": "SkillSnap.Server",
-        "projectPath": "D:\\SkillSnap\\server\\SkillSnap.Server.csproj",
+        "projectPath": "D:\\SkillSnap\\Server\\SkillSnap.Server.csproj",
         "packagesPath": "C:\\Users\\HP\\.nuget\\packages\\",
-        "outputPath": "D:\\SkillSnap\\server\\obj\\",
+        "outputPath": "D:\\SkillSnap\\Server\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\HP\\AppData\\Roaming\\NuGet\\NuGet.Config"

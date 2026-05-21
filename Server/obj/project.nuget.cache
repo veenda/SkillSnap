@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "nGqeIuCfKwSc5x/0KOzjJyBYhC1Z4pfc9BAJ3u3Qc8Ln5ptxuqe/qDMwRl9Q5fIJTtYwTufuh/b/gD9pWWLuCQ==",
+  "dgSpecHash": "7Pt1T9g9yl+wAxMe6d+GYg1NqFVyZNAismRhE0aBEjisrVAu07WAe5NROFA1FNjeglnK3FCspF9vlBM7g7d4sw==",
   "success": true,
-  "projectFilePath": "D:\\SkillSnap\\server\\SkillSnap.Server.csproj",
+  "projectFilePath": "D:\\SkillSnap\\Server\\SkillSnap.Server.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\HP\\.nuget\\packages\\microsoft.aspnetcore.authorization\\7.0.20\\microsoft.aspnetcore.authorization.7.0.20.nupkg.sha512",
     "C:\\Users\\HP\\.nuget\\packages\\microsoft.aspnetcore.components\\7.0.20\\microsoft.aspnetcore.components.7.0.20.nupkg.sha512",
