@@ -1,0 +1,21 @@
+@* Skills in tag-style list *@
+
+@page "/skill-tags"
+@using SkillSnap.Shared.Models;
+
+<h3>My Skills</h3>
+<ul>
+    @foreach (var skill in skills)
+    {
+        <li>@skill.Name - @skill.Level</li>
+    }
+</ul>
+
+@code {
+    private List<Skill> skills = new List<Skill>
+    {
+        new Skill { Name = "C#", Level = "Intermediate" },
+        new Skill { Name = "Blazor", Level = "Beginner" },
+        new Skill { Name = "SQL", Level = "Intermediate" }
+    };
+}

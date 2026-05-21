@@ -1,0 +1,11 @@
+D:\SkillSnap\Shared\obj\Debug\net7.0\SkillSnap.Shared.GeneratedMSBuildEditorConfig.editorconfig
+D:\SkillSnap\Shared\obj\Debug\net7.0\SkillSnap.Shared.AssemblyInfoInputs.cache
+D:\SkillSnap\Shared\obj\Debug\net7.0\SkillSnap.Shared.AssemblyInfo.cs
+D:\SkillSnap\Shared\obj\Debug\net7.0\SkillSnap.Shared.csproj.CoreCompileInputs.cache
+D:\SkillSnap\Shared\bin\Debug\net7.0\SkillSnap.Shared.deps.json
+D:\SkillSnap\Shared\bin\Debug\net7.0\SkillSnap.Shared.dll
+D:\SkillSnap\Shared\bin\Debug\net7.0\SkillSnap.Shared.pdb
+D:\SkillSnap\Shared\obj\Debug\net7.0\SkillSnap.Shared.dll
+D:\SkillSnap\Shared\obj\Debug\net7.0\refint\SkillSnap.Shared.dll
+D:\SkillSnap\Shared\obj\Debug\net7.0\SkillSnap.Shared.pdb
+D:\SkillSnap\Shared\obj\Debug\net7.0\ref\SkillSnap.Shared.dll

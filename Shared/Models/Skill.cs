@@ -1,6 +1,11 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
+// Id (int)
+// Name (string)
+// Level (string)
+// PortfolioUserId (foreign key)
+
 namespace SkillSnap.Shared.Models
 {
     public class Skill

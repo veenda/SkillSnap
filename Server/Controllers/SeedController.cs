@@ -4,7 +4,7 @@ using SkillSnap.Server.Data;
 
 namespace SkillSnap.Api.Controllers
 {
-    [ApiController]
+    [ApiController]
     [Route("api/[controller]")]
     public class SeedController : ControllerBase
     {
@@ -13,6 +13,7 @@ namespace SkillSnap.Api.Controllers
         {
             _context = context;
         }
+
         [HttpPost]
         public IActionResult Seed()
         {
@@ -36,6 +37,7 @@ namespace SkillSnap.Api.Controllers
                     new Skill { Name = "Blazor", Level = "Intermediate" }
                 }
             };
+
             _context.PortfolioUsers.Add(user);
             _context.SaveChanges();
             return Ok("Sample data inserted.");

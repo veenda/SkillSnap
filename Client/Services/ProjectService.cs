@@ -1,15 +1,15 @@
 using SkillSnap.Shared.Models;
-using.System.Net.Http.Json;
+using System.Net.Http.Json;
 
 public class ProjectService
 {
-    provate readonly HttpClient _httpClient;
+    private readonly HttpClient _httpClient;
     public ProjectService(HttpClient httpClient)
     {
         _httpClient = httpClient;
     }
 
-    public async Task<List<Project>> GetProjects()
+    public async Task<List<Project>> GetProjectsAsync()
     {
         return await _httpClient.GetFromJsonAsync<List<Project>>("api/projects");
     }

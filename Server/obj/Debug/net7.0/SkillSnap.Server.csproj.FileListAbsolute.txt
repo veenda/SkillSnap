@@ -90,3 +90,7 @@ D:\SkillSnap\Server\obj\Debug\net7.0\refint\SkillSnap.Server.dll
 D:\SkillSnap\Server\obj\Debug\net7.0\SkillSnap.Server.pdb
 D:\SkillSnap\Server\obj\Debug\net7.0\SkillSnap.Server.genruntimeconfig.cache
 D:\SkillSnap\Server\obj\Debug\net7.0\ref\SkillSnap.Server.dll
+D:\SkillSnap\Server\bin\Debug\net7.0\Humanizer.dll
+D:\SkillSnap\Server\bin\Debug\net7.0\Microsoft.EntityFrameworkCore.Design.dll
+D:\SkillSnap\Server\bin\Debug\net7.0\Mono.TextTemplating.dll
+D:\SkillSnap\Server\bin\Debug\net7.0\System.CodeDom.dll
