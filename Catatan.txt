@@ -1,0 +1,23 @@
+Scaffoloding
+A technique used to quickly generate the foundational code and structure of an application, often including data models, services, or UI components.
+- API and Blazor WebAssembly projects created in one structure.
+- Shared Models projects
+
+Data Models
+Structured representations of dstaa entities that define the properties and relationships of the data used in an application.
+- Define PorfolioUser, Project, and Skill classes.
+- Create one-to-many and many-to-many relationships
+
+EF Core Configuration
+The process of setting up and managing dtaabase connections ans schema definitions, inclusing defining a context class and applying migrations.
+- Add a DbContext class to manage dtaabase connection
+- Set up SQLite for local development
+- Use migrations to generate your schema
+
+Layout
+- Components include ProfileCard, ProjectList, SkillTags
+- No interactivity yet - focus is on layout and structure
+
+Copilot Assistance
+- Use prompts to scaffold models, configure DB, and build UI components
+- Great for refining boilerplate or repetitive setup tasks

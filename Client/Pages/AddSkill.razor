@@ -1,0 +1,11 @@
+<h3>Add a New Skill</h3>
+
+<input @bind="newSkillName" placeholder="Skill Name" />
+<input @bind="newSkillLevel" placeholder="Skill Level" />
+
+<p>You're adding: @newSkillName at @newSkillLevel level</p>
+
+@code {
+    private string newSkillName;
+    private string newSkillLevel;
+}

@@ -1,0 +1,30 @@
+@inject ProjectService ProjectService
+@using SkillSnap.Shared.Models
+
+<h3>My Projects</h3>
+
+<ul>
+    @if (projects == null)
+    {
+        <li>Loading...</li>
+    }
+    else if (projects.Count == 0)
+    {
+        <li>No projects found.</li>
+    }
+    else
+    {
+        @foreach (var project in projects)
+        {
+            <li>@project.Title - @project.Description</li>
+        }
+    }
+</ul>
+
+@code {
+    private List<Project> projects;
+    protected override async Task OnInitializedAsync()
+    {
+        projects = await ProjectService.GetProjectsAsync();
+    }
+}
