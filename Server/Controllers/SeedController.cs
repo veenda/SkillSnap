@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using SkillSnap.Api.Models;
+using SkillSnap.Shared.Models;
+using SkillSnap.Server.Data;
 
 namespace SkillSnap.Api.Controllers
 {

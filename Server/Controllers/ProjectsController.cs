@@ -54,6 +54,6 @@ public class ProjectsController : ControllerBase
         _context.Projects.Add(project);
         await _context.SaveChangesAsync();
         _cache.Remove("project_list"); // make sure user getting the latest data
-        return CreatedAtAction(nameof(GetProject), new { id = project.Id }, project);
+        return CreatedAtAction(nameof(GetProjects), new { id = project.Id }, project);
     }
 }

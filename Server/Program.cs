@@ -7,7 +7,6 @@ using SkillSnap.Shared.Models;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 
@@ -15,13 +14,13 @@ builder.Services.AddRazorPages();
 // Run EF Core commands: dotnet ef migrations add InitialCreate
 // dotnet ef database update
 builder.Services.AddDbContext<SkillSnapContext>(options =>
-    options.UseSqlServer("Data Source=skillsnap.db"));
+    options.UseSqlite("Data Source=skillsnap.db"));
 
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowClient", policy =>
     {
-        policy.AllowAnyOrigin("https://localhost:5001")
+        policy.WithOrigins("https://localhost:5001")
               .AllowAnyMethod()
               .AllowAnyHeader();
     });
