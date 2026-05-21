@@ -1,0 +1,8 @@
+D:\SkillSnap\Server\obj\Debug\net7.0\SkillSnap.Server.csproj.AssemblyReference.cache
+D:\SkillSnap\Server\obj\Debug\net7.0\SkillSnap.Server.GeneratedMSBuildEditorConfig.editorconfig
+D:\SkillSnap\Server\obj\Debug\net7.0\SkillSnap.Server.AssemblyInfoInputs.cache
+D:\SkillSnap\Server\obj\Debug\net7.0\SkillSnap.Server.AssemblyInfo.cs
+D:\SkillSnap\Server\obj\Debug\net7.0\SkillSnap.Server.csproj.CoreCompileInputs.cache
+D:\SkillSnap\Server\obj\Debug\net7.0\SkillSnap.Server.MvcApplicationPartsAssemblyInfo.cache
+D:\SkillSnap\Server\obj\Debug\net7.0\SkillSnap.Server.RazorAssemblyInfo.cache
+D:\SkillSnap\Server\obj\Debug\net7.0\SkillSnap.Server.RazorAssemblyInfo.cs
