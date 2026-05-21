@@ -3,12 +3,12 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using SkillSnap.Shared.Models;
 
-namespace class SkillSnap.Server.Data;
+namespace SkillSnap.Server.Data;
 
-public classApplicationUser : IdentityUser {}
+public class ApplicationUser : IdentityUser {}
 
 // Configure EF Core
-namespace class SkillSnapContext : IdentityDbContext<ApplicationUser>
+public class SkillSnapContext : IdentityDbContext<ApplicationUser>
 {
     public SkillSnapContext(DbContextOptions<SkillSnapContext> options) : base(options) { }
     public DbSet<PortfolioUser> PortfolioUsers { get; set; }

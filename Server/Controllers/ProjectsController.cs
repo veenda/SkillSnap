@@ -10,7 +10,7 @@ using Microsoft.Extensions.Caching.Memory;
 public class ProjectsController : ControllerBase
 {
     private readonly SkillSnapContext _context;
-    private redaonly IMemoryCache _cache;
+    private readonly IMemoryCache _cache;
 
     public ProjectsController(SkillSnapContext context, IMemoryCache cache)
     {
@@ -38,13 +38,13 @@ public class ProjectsController : ControllerBase
                     Id = p.PortfolioUser.Id,
                     Name = p.PortfolioUser.Name
                 }
-            })
+            }).ToListAsync();
 
             var cacheOptions = new MemoryCacheEntryOptions()
                 .SetSlidingExpiration(TimeSpan.FromMinutes(5));
             _cache.Set("project_list", projects, cacheOptions);
         }
-        return Ok(projects)
+        return Ok(projects);
     }
 
     [Authorize(Roles = "Admin")]
