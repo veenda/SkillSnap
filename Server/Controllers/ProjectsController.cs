@@ -79,4 +79,37 @@ public class ProjectsController : ControllerBase
 
         return CreatedAtAction(nameof(GetProject), new { id = project.Id }, project);
     }
+
+    [Authorize(Roles = "Admin")]
+    [HttpPut("{id}")]
+    public async Task<ActionResult<Project>> UpdateProject(int id, [FromBody] Project project)
+    {
+        if (id != project.Id)
+        {
+            return BadRequest("Project ID mismatch");
+        }
+
+        _context.Projects.Update(project);
+        await _context.SaveChangesAsync();
+        _cache.Remove("project_list");
+
+        return Ok(project);
+    }
+
+    [Authorize(Roles = "Admin")]
+    [HttpDelete("{id}")]
+    public async Task<ActionResult> DeleteProject(int id)
+    {
+        var project = await _context.Projects.FindAsync(id);
+        if (project == null)
+        {
+            return NotFound();
+        }
+
+        _context.Projects.Remove(project);
+        await _context.SaveChangesAsync();
+        _cache.Remove("project_list");
+
+        return NoContent();
+    }
 }
