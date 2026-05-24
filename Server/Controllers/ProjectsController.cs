@@ -51,7 +51,6 @@ public class ProjectsController : ControllerBase
         return Ok(projects);
     }
 
-
     [HttpGet("{id}")]
     public async Task<ActionResult<Project>> GetProject(int id)
     {
@@ -82,30 +81,11 @@ public class ProjectsController : ControllerBase
 
     [Authorize(Roles = "Admin")]
     [HttpPut("{id}")]
-<<<<<<< HEAD
-    public async Task<ActionResult<Project>> UpdateProject(int id, [FromBody] Project project)
-    {
-        if (id != project.Id)
-        {
-            return BadRequest("Project ID mismatch");
-        }
-
-        _context.Projects.Update(project);
-        await _context.SaveChangesAsync();
-        _cache.Remove("project_list");
-
-        return Ok(project);
-    }
-
-    [Authorize(Roles = "Admin")]
-    [HttpDelete("{id}")]
-    public async Task<ActionResult> DeleteProject(int id)
-=======
     public async Task<IActionResult> UpdateProject(int id, [FromBody] Project updatedProject)
     {
         if (id != updatedProject.Id)
         {
-            return BadRequest();
+            return BadRequest("Project ID mismatch");
         }
 
         var existingProject = await _context.Projects.FindAsync(id);
@@ -124,10 +104,9 @@ public class ProjectsController : ControllerBase
         return NoContent();
     }
 
-    [Authorize(Roles = "Admin")
+    [Authorize(Roles = "Admin")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteProject(int id)
->>>>>>> b4cb036 (Part 3)
     {
         var project = await _context.Projects.FindAsync(id);
         if (project == null)
@@ -141,8 +120,4 @@ public class ProjectsController : ControllerBase
 
         return NoContent();
     }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> b4cb036 (Part 3)

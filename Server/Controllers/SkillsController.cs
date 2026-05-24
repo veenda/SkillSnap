@@ -20,7 +20,6 @@ public class SkillsController : ControllerBase
         _cache = cache;
     }
 
-    [Authorize]
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Skill>>> GetSkills()
     {
@@ -52,7 +51,6 @@ public class SkillsController : ControllerBase
         return Ok(skills);
     }
 
-    [Authorize]
     [HttpGet("{id}")]
     public async Task<ActionResult<Skill>> GetSkill(int id)
     {
@@ -84,25 +82,6 @@ public class SkillsController : ControllerBase
 
     [Authorize(Roles = "Admin")]
     [HttpPut("{id}")]
-<<<<<<< HEAD
-    public async Task<ActionResult<Skill>> UpdateSkill(int id, [FromBody] Skill skill)
-    {
-        if (id != skill.Id)
-        {
-            return BadRequest("Skill ID mismatch");
-        }
-
-        _context.Skills.Update(skill);
-        await _context.SaveChangesAsync();
-        _cache.Remove("skill_list");
-
-        return Ok(skill);
-    }
-
-    [Authorize(Roles = "Admin")]
-    [HttpDelete("{id}")]
-    public async Task<ActionResult> DeleteSkill(int id)
-=======
     public async Task<IActionResult> UpdateSkill(int id, [FromBody] Skill skill)
     {
         if (id != skill.Id)
@@ -130,11 +109,11 @@ public class SkillsController : ControllerBase
         }
 
         return NoContent();
-    
+    }
+
     [Authorize(Roles = "Admin")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteSkill(int id)
->>>>>>> b4cb036 (Part 3)
     {
         var skill = await _context.Skills.FindAsync(id);
         if (skill == null)
