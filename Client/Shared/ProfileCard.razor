@@ -1,13 +1,17 @@
-<div class="card">
-    <img src="@ImageUrl" alt="Profil image" class="card-img-top" />
-    <div class="card-body">
-        <h5 class="card-title">@Name</h5>
-        <p class="card-text">@Bio</p>
+<div class="card profile-card shadow-sm">
+    <div class="card-body text-center">
+        <img src="@(string.IsNullOrWhiteSpace(ImageUrl) ? DefaultImage : ImageUrl)"
+             alt="Profile image of @Name"
+             class="profile-avatar mb-3" />
+        <h5 class="card-title mb-2">@Name</h5>
+        <p class="card-text text-muted">@Bio</p>
     </div>
 </div>
 
 @code {
-    [Parameter] public string Name { get; set; }
-    [Parameter] public string Bio { get; set; }
-    [Parameter] public string ImageUrl { get; set; }
+    private const string DefaultImage = "https://via.placeholder.com/150";
+
+    [Parameter] public string? Name { get; set; } = "Unknown User";
+    [Parameter] public string? Bio { get; set; } = "No bio available.";
+    [Parameter] public string? ImageUrl { get; set; }
 }

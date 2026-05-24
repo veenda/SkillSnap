@@ -94,3 +94,11 @@ D:\SkillSnap\Server\bin\Debug\net7.0\Humanizer.dll
 D:\SkillSnap\Server\bin\Debug\net7.0\Microsoft.EntityFrameworkCore.Design.dll
 D:\SkillSnap\Server\bin\Debug\net7.0\Mono.TextTemplating.dll
 D:\SkillSnap\Server\bin\Debug\net7.0\System.CodeDom.dll
+D:\SkillSnap\Server\bin\Debug\net7.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+D:\SkillSnap\Server\bin\Debug\net7.0\Microsoft.IdentityModel.Abstractions.dll
+D:\SkillSnap\Server\bin\Debug\net7.0\Microsoft.IdentityModel.JsonWebTokens.dll
+D:\SkillSnap\Server\bin\Debug\net7.0\Microsoft.IdentityModel.Logging.dll
+D:\SkillSnap\Server\bin\Debug\net7.0\Microsoft.IdentityModel.Protocols.dll
+D:\SkillSnap\Server\bin\Debug\net7.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+D:\SkillSnap\Server\bin\Debug\net7.0\Microsoft.IdentityModel.Tokens.dll
+D:\SkillSnap\Server\bin\Debug\net7.0\System.IdentityModel.Tokens.Jwt.dll

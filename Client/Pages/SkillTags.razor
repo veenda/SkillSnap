@@ -1,21 +1,149 @@
-@* Skills in tag-style list *@
-
 @page "/skill-tags"
-@using SkillSnap.Shared.Models;
+@using System.ComponentModel.DataAnnotations
+@using SkillSnap.Shared.Models
 
 <h3>My Skills</h3>
-<ul>
-    @foreach (var skill in skills)
-    {
-        <li>@skill.Name - @skill.Level</li>
-    }
-</ul>
+
+@if (!string.IsNullOrEmpty(loadError))
+{
+    <div class="alert alert-danger">Failed to load skills: @loadError</div>
+}
+
+@if (skills == null)
+{
+    <p>Loading skills...</p>
+}
+else if (skills.Count == 0)
+{
+    <p>No skills available.</p>
+}
+else
+{
+    <ul class="list-group mb-4">
+        @foreach (var skill in skills)
+        {
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                <span>@skill.Name</span>
+                <span class="badge bg-secondary">@skill.Level</span>
+            </li>
+        }
+    </ul>
+}
+
+<EditForm Model="newSkill" OnValidSubmit="HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="mb-3">
+        <label class="form-label" for="skillName">Skill name</label>
+        <InputText id="skillName" class="form-control" @bind-Value="newSkill.Name" />
+        <ValidationMessage For="() => newSkill.Name" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label" for="skillLevel">Skill level</label>
+        <InputText id="skillLevel" class="form-control" @bind-Value="newSkill.Level" />
+        <ValidationMessage For="() => newSkill.Level" />
+    </div>
+
+    <button type="submit" class="btn btn-primary" disabled="@isSubmitting">Add Skill</button>
+</EditForm>
+
+@if (!string.IsNullOrEmpty(formError))
+{
+    <div class="alert alert-danger mt-3">Could not save skill: @formError</div>
+}
+
+@if (!string.IsNullOrEmpty(successMessage))
+{
+    <div class="alert alert-success mt-3">@successMessage</div>
+}
 
 @code {
-    private List<Skill> skills = new List<Skill>
+    [Inject]
+    private SkillService SkillService { get; set; } = default!;
+
+    private List<Skill>? skills;
+    private string loadError = string.Empty;
+    private string formError = string.Empty;
+    private string successMessage = string.Empty;
+    private bool isSubmitting;
+
+    private AddSkillModel newSkill = new AddSkillModel();
+
+    protected override async Task OnInitializedAsync()
     {
-        new Skill { Name = "C#", Level = "Intermediate" },
-        new Skill { Name = "Blazor", Level = "Beginner" },
-        new Skill { Name = "SQL", Level = "Intermediate" }
-    };
+        await LoadSkillsAsync();
+    }
+
+    private async Task LoadSkillsAsync()
+    {
+        try
+        {
+            skills = await SkillService.GetSkillsAsync();
+            loadError = string.Empty;
+        }
+        catch (HttpRequestException ex)
+        {
+            skills = new List<Skill>();
+            loadError = ex.Message;
+        }
+        catch (Exception ex)
+        {
+            skills = new List<Skill>();
+            loadError = "An unexpected error occurred while loading skills.";
+            Console.Error.WriteLine(ex);
+        }
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        isSubmitting = true;
+        formError = string.Empty;
+        successMessage = string.Empty;
+
+        try
+        {
+            var skill = new Skill
+            {
+                Name = newSkill.Name,
+                Level = newSkill.Level,
+                PortfolioUserId = 1 // adjust if you want a real user id
+            };
+
+            var response = await SkillService.AddSkillAsync(skill);
+            if (response.IsSuccessStatusCode)
+            {
+                successMessage = "Skill added successfully.";
+                newSkill = new AddSkillModel();
+                await LoadSkillsAsync();
+            }
+            else
+            {
+                formError = $"Server returned {(int)response.StatusCode} - {response.ReasonPhrase}";
+            }
+        }
+        catch (HttpRequestException ex)
+        {
+            formError = ex.Message;
+        }
+        catch (Exception ex)
+        {
+            formError = "An unexpected error occurred while saving the skill.";
+            Console.Error.WriteLine(ex);
+        }
+        finally
+        {
+            isSubmitting = false;
+        }
+    }
+
+    private class AddSkillModel
+    {
+        [Required(ErrorMessage = "Skill name is required.")]
+        public string Name { get; set; } = string.Empty;
+
+        [Required(ErrorMessage = "Skill level is required.")]
+        public string Level { get; set; } = string.Empty;
+    }
 }

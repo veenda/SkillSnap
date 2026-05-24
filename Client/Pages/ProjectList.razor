@@ -1,6 +1,8 @@
 @* Loop of dummy project *@
 
+@* Connect Services to Components *@
 @inject ProjectService ProjectService
+
 @using SkillSnap.Shared.Models
 
 <h3>My Projects</h3>
@@ -23,8 +25,10 @@
     }
 </ul>
 
+@* Connect Services to Components *@
 @code {
-    private List<Project> projects;
+    private List<Project>? projects;
+
     protected override async Task OnInitializedAsync()
     {
         projects = await ProjectService.GetProjectsAsync();

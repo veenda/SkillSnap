@@ -198,15 +198,15 @@
       "mscorlib.dll": "sha256-HYyp9hO+GKFyupcEiY1PxtBBXbHzefsO3Q8RiQTaNCA=",
       "netstandard.dll": "sha256-N5CcC3sLzGBesbmeJAp5bwxABN9u7SwkIO5qfFjzoik=",
       "System.Private.CoreLib.dll": "sha256-bJS1DJmhjP7PvegYG+Z8O9EDtRY78HKinA3LUMVLlSQ=",
-      "SkillSnap.Shared.dll": "sha256-sU4aK30NkCICcjK7F\/Tk7Psv1F\/sZSXYa2R04atd7WY=",
-      "SkillSnap.Client.dll": "sha256-KQSdlqmHzfeWE6IES0iPcVUVf5gzQYpa59R8Avek0Lw="
+      "SkillSnap.Shared.dll": "sha256-2lYpTEjE7T\/UjD\/1ub2XYohLw54M7yBdVXph3qNkgYY=",
+      "SkillSnap.Client.dll": "sha256-be6s7\/jBNoWhKnzwwfi84sYsSGhwpbWPESuBXycIwqE="
     },
     "extensions": null,
     "lazyAssembly": null,
     "libraryInitializers": null,
     "pdb": {
-      "SkillSnap.Shared.pdb": "sha256-ly0tzyafMFKtkwLxXHEo\/x9Qi6Sf7qoasluSGGy4vYA=",
-      "SkillSnap.Client.pdb": "sha256-P3bWOsHRkMJ7\/75AGvDJCWrmGAQbPi05luchuNBFzS8="
+      "SkillSnap.Shared.pdb": "sha256-YreU4YHWTtWUntugMy7rQtXtuX\/cz3plf53pBXF\/C\/A=",
+      "SkillSnap.Client.pdb": "sha256-6OdINeYNP3yGbXWcOZ6NVPF+qiLyDxU5BI42jYodEJ8="
     },
     "runtime": {
       "dotnet.7.0.20.nhmn8mmj35.js": "sha256-eaJTmow4t8eE7FZMZR5Ja41JMOefGCbIYDTdpclGsac=",

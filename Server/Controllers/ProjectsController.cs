@@ -1,9 +1,11 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using SkillSnap.Server.Data;
 using SkillSnap.Shared.Models;
-using Microsoft.Extensions.Caching.Memory;
+
+namespace SkillSnap.Server.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -25,26 +27,46 @@ public class ProjectsController : ControllerBase
         if (!_cache.TryGetValue("project_list", out List<Project> projects))
         {
             projects = await _context.Projects
+                .Include(p => p.PortfolioUser)
+                .AsNoTracking()
+                .Select(p => new Project
+                {
+                    Id = p.Id,
+                    Title = p.Title,
+                    Description = p.Description,
+                    PortfolioUserId = p.PortfolioUserId,
+                    PortfolioUser = p.PortfolioUser != null
+                        ? new PortfolioUser
+                        {
+                            Id = p.PortfolioUser.Id,
+                            Name = p.PortfolioUser.Name
+                        }
+                        : null
+                })
+                .ToListAsync();
+
+            _cache.Set("project_list", projects, new MemoryCacheEntryOptions()
+                .SetSlidingExpiration(TimeSpan.FromMinutes(5)));
+        }
+
+        return Ok(projects);
+    }
+
+    [Authorize]
+    [HttpGet("{id}")]
+    public async Task<ActionResult<Project>> GetProject(int id)
+    {
+        var project = await _context.Projects
             .Include(p => p.PortfolioUser)
             .AsNoTracking()
-            .Select(p => new Project
-            {
-                Id = p.Id,
-                Title = p.Title,
-                Description= p.Description,
-                PortfolioUserId = p.PortfolioUserId,
-                PortfolioUser = new PortfolioUser
-                {
-                    Id = p.PortfolioUser.Id,
-                    Name = p.PortfolioUser.Name
-                }
-            }).ToListAsync();
+            .FirstOrDefaultAsync(p => p.Id == id);
 
-            var cacheOptions = new MemoryCacheEntryOptions()
-                .SetSlidingExpiration(TimeSpan.FromMinutes(5));
-            _cache.Set("project_list", projects, cacheOptions);
+        if (project == null)
+        {
+            return NotFound();
         }
-        return Ok(projects);
+
+        return Ok(project);
     }
 
     [Authorize(Roles = "Admin")]
@@ -53,7 +75,8 @@ public class ProjectsController : ControllerBase
     {
         _context.Projects.Add(project);
         await _context.SaveChangesAsync();
-        _cache.Remove("project_list"); // make sure user getting the latest data
-        return CreatedAtAction(nameof(GetProjects), new { id = project.Id }, project);
+        _cache.Remove("project_list");
+
+        return CreatedAtAction(nameof(GetProject), new { id = project.Id }, project);
     }
 }

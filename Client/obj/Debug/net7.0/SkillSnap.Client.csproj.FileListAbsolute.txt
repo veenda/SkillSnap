@@ -834,3 +834,4 @@ D:\SkillSnap\Client\obj\Debug\net7.0\SkillSnap.Client.dll
 D:\SkillSnap\Client\obj\Debug\net7.0\refint\SkillSnap.Client.dll
 D:\SkillSnap\Client\obj\Debug\net7.0\SkillSnap.Client.pdb
 D:\SkillSnap\Client\obj\Debug\net7.0\ref\SkillSnap.Client.dll
+D:\SkillSnap\Client\obj\Debug\net7.0\scopedcss\Shared\ProfileCard.razor.rz.scp.css

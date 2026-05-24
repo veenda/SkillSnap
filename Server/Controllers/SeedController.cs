@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using SkillSnap.Shared.Models;
 using SkillSnap.Server.Data;
 
-namespace SkillSnap.Api.Controllers
+namespace SkillSnap.Server.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]

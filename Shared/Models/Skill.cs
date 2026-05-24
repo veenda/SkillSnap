@@ -19,6 +19,6 @@ namespace SkillSnap.Shared.Models
 
         [ForeignKey("PortfolioUser")]
         public int PortfolioUserId { get; set; }
-        public PortfolioUser PortfolioUser { get; set; }
+        public PortfolioUser? PortfolioUser { get; set; }
     }
 }

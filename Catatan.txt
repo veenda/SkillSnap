@@ -1,3 +1,5 @@
+|| Part 1
+
 Scaffoloding
 A technique used to quickly generate the foundational code and structure of an application, often including data models, services, or UI components.
 - API and Blazor WebAssembly projects created in one structure.
@@ -21,3 +23,57 @@ Layout
 Copilot Assistance
 - Use prompts to scaffold models, configure DB, and build UI components
 - Great for refining boilerplate or repetitive setup tasks
+
+|| Part 2
+
+API Controllers
+Defines the HTTP routes and logic used to handle client requests and send responses
+- Create GET and POST Projects and Skills 
+- Endpoints serve and store data from the database
+
+CORS 
+A security feature that allows or restricts resources on a web server to be requested from another domain or origin 
+- Allows secure cross-origin communication
+- Required when API and front-end run separately
+
+Dependency Injection
+A design pattern that allows services to be registered and then njected into components for reuse and separation of concerns 
+
+Dependency Injection in Blazor
+- Acts as translator between your component and the API
+- Inject into components to call Endpoints
+
+Data Binding
+A mechanism in Blazor that connects data sources to the user interface, allowing dynamic content rendering and updates
+- Fetched data is bound to component UI
+- Use @inject, @code, and lifecycle methods like OnInitializedAsync()
+
+Copilot
+- Get suggestions for validation, error handling, and flow fixes
+- Use prompts to scaffold services and components
+
+|| Part 3
+
+ASP.NET Identity
+A membership system for ASP.NET applications that provides functionality for user authentication, authorization, and management, including support for roles and claims.
+- Uses built-in types like ApplicationUser and IdentityDbContext
+- Handles password hashing and session tracking
+
+Authentication Endpoints
+API routes that handles user login and registration, typically issuing tokens upon successful authentication
+- Login and registration APIs use Identity's managers
+- Return a JWT token on successful login
+
+Authorization
+The process of restricting access to certain parts of an application based on user roles or claims
+- Use [Authorize] on controller applications
+- Add role filters for admin-only access
+
+Token handling
+The process of securely storing, using, and managing tokens on the client side to authenticate and authorize users
+- Tokens are stored in browser local storage
+- Used in API requests to maintain user state
+
+Copilot Security support
+- Prompts help develop endpoints and validate logic
+- Copilot suggest improvements and error handling for auth flow

@@ -3,18 +3,46 @@ using Microsoft.EntityFrameworkCore;
 using SkillSnap.Server.Data;
 using Microsoft.AspNetCore.Identity;
 using SkillSnap.Shared.Models;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
+builder.Services.AddMemoryCache();
 
-// Register the context and configure SQLite
-// Run EF Core commands: dotnet ef migrations add InitialCreate
-// dotnet ef database update
 builder.Services.AddDbContext<SkillSnapContext>(options =>
-    options.UseSqlite("Data Source=skillsnap.db"));
+    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+    .AddEntityFrameworkStores<SkillSnapContext>()
+    .AddDefaultTokenProviders();
+
+// Configure JWT Authentication
+var jwtKey = builder.Configuration["Jwt:Key"] ?? "your-secret-key-change-this-in-production";
+var jwtIssuer = builder.Configuration["Jwt:Issuer"] ?? "SkillSnap";
+var jwtAudience = builder.Configuration["Jwt:Audience"] ?? "SkillSnapClient";
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = jwtIssuer,
+        ValidAudience = jwtAudience,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
+    };
+});
 
 builder.Services.AddCors(options =>
 {
@@ -22,14 +50,10 @@ builder.Services.AddCors(options =>
     {
         policy.WithOrigins("https://localhost:5001")
               .AllowAnyMethod()
-              .AllowAnyHeader();
+              .AllowAnyHeader()
+              .AllowCredentials();
     });
 });
-
-builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
-    .AddEntityFrameworkStores<SkillSnapContext>();
-
-builder.Services.AddMemoryCache();
 
 var app = builder.Build();
 
@@ -54,9 +78,12 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapRazorPages();
 app.MapControllers();
 app.MapFallbackToFile("index.html");
 
 app.Run();
+
