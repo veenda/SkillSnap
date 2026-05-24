@@ -20,7 +20,6 @@ public class ProjectsController : ControllerBase
         _cache = cache;
     }
 
-    [Authorize]
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Project>>> GetProjects()
     {
@@ -52,7 +51,7 @@ public class ProjectsController : ControllerBase
         return Ok(projects);
     }
 
-    [Authorize]
+
     [HttpGet("{id}")]
     public async Task<ActionResult<Project>> GetProject(int id)
     {
@@ -69,6 +68,7 @@ public class ProjectsController : ControllerBase
         return Ok(project);
     }
 
+    // Admin only
     [Authorize(Roles = "Admin")]
     [HttpPost]
     public async Task<ActionResult<Project>> AddProject([FromBody] Project project)
@@ -82,6 +82,7 @@ public class ProjectsController : ControllerBase
 
     [Authorize(Roles = "Admin")]
     [HttpPut("{id}")]
+<<<<<<< HEAD
     public async Task<ActionResult<Project>> UpdateProject(int id, [FromBody] Project project)
     {
         if (id != project.Id)
@@ -99,6 +100,34 @@ public class ProjectsController : ControllerBase
     [Authorize(Roles = "Admin")]
     [HttpDelete("{id}")]
     public async Task<ActionResult> DeleteProject(int id)
+=======
+    public async Task<IActionResult> UpdateProject(int id, [FromBody] Project updatedProject)
+    {
+        if (id != updatedProject.Id)
+        {
+            return BadRequest();
+        }
+
+        var existingProject = await _context.Projects.FindAsync(id);
+        if (existingProject == null)
+        {
+            return NotFound();
+        }
+
+        existingProject.Title = updatedProject.Title;
+        existingProject.Description = updatedProject.Description;
+        existingProject.PortfolioUserId = updatedProject.PortfolioUserId;
+
+        await _context.SaveChangesAsync();
+        _cache.Remove("project_list");
+
+        return NoContent();
+    }
+
+    [Authorize(Roles = "Admin")
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteProject(int id)
+>>>>>>> b4cb036 (Part 3)
     {
         var project = await _context.Projects.FindAsync(id);
         if (project == null)
@@ -112,4 +141,8 @@ public class ProjectsController : ControllerBase
 
         return NoContent();
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> b4cb036 (Part 3)

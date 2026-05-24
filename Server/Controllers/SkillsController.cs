@@ -69,6 +69,8 @@ public class SkillsController : ControllerBase
         return Ok(skill);
     }
 
+    // Admin only
+
     [Authorize(Roles = "Admin")]
     [HttpPost]
     public async Task<ActionResult<Skill>> AddSkill([FromBody] Skill skill)
@@ -82,6 +84,7 @@ public class SkillsController : ControllerBase
 
     [Authorize(Roles = "Admin")]
     [HttpPut("{id}")]
+<<<<<<< HEAD
     public async Task<ActionResult<Skill>> UpdateSkill(int id, [FromBody] Skill skill)
     {
         if (id != skill.Id)
@@ -99,6 +102,39 @@ public class SkillsController : ControllerBase
     [Authorize(Roles = "Admin")]
     [HttpDelete("{id}")]
     public async Task<ActionResult> DeleteSkill(int id)
+=======
+    public async Task<IActionResult> UpdateSkill(int id, [FromBody] Skill skill)
+    {
+        if (id != skill.Id)
+        {
+            return BadRequest();
+        }
+
+        _context.Entry(skill).State = EntityState.Modified;
+
+        try
+        {
+            await _context.SaveChangesAsync();
+            _cache.Remove("skill_list");
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            if (!_context.Skills.Any(s => s.Id == id))
+            {
+                return NotFound();
+            }
+            else
+            {
+                throw;
+            }
+        }
+
+        return NoContent();
+    
+    [Authorize(Roles = "Admin")]
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteSkill(int id)
+>>>>>>> b4cb036 (Part 3)
     {
         var skill = await _context.Skills.FindAsync(id);
         if (skill == null)

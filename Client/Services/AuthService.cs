@@ -1,15 +1,22 @@
 using SkillSnap.Shared.Models;
 using System.Net.Http.Json;
+using Microsoft.JSInterop; // local storage access
+
+namespace SkillSnap.Client.Services;
 
 public class AuthService
 {
     private readonly HttpClient _httpClient;
+    private readonly IJSRuntime _jsRuntime;
+    private const string TokenKey = "jwt_token";
 
-    public AuthService(HttpClient httpClient)
+    public AuthService(HttpClient httpClient, IJSRuntime jsRuntime)
     {
         _httpClient = httpClient;
+        _jsRuntime = jsRuntime;
     }
 
+    // Register
     public async Task<AuthResponse?> RegisterAsync(RegisterModel model)
     {
         try
@@ -22,6 +29,7 @@ public class AuthService
                     new System.Text.Json.JsonSerializerOptions { PropertyNameCaseInsensitive = true });
                 if (result?.Token != null)
                 {
+                    await _jsRuntime.InvokeVoidAsync("localStorage.setItem", TokenKey, result.Token);
                     SetAuthorizationHeader(result.Token);
                 }
                 return result;
@@ -35,6 +43,7 @@ public class AuthService
         }
     }
 
+    // Login
     public async Task<AuthResponse?> LoginAsync(LoginModel model)
     {
         try
@@ -47,6 +56,7 @@ public class AuthService
                     new System.Text.Json.JsonSerializerOptions { PropertyNameCaseInsensitive = true });
                 if (result?.Token != null)
                 {
+                    await _jsRuntime.InvokeVoidAsync("localStorage.setItem", TokenKey, result.Token);
                     SetAuthorizationHeader(result.Token);
                 }
                 return result;
@@ -60,16 +70,30 @@ public class AuthService
         }
     }
 
-    public void Logout()
+    // Logout
+    public async Task Logout()
     {
+        await _jsRuntime.InvokeVoidAsync("localStorage.removeItem", TokenKey);
         SetAuthorizationHeader(string.Empty);
     }
 
+    // Intialize auth state on app startup
+    public async Task InitializeAuthStateAsync()
+    {
+        var token = await _jsRuntime.InvokeAsync<string>("localStorage.getItem", TokenKey);
+        if (!string.IsNullOrEmpty(token))
+        {
+            SetAuthorizationHeader(token);
+        }
+    }
+
+    // IsAuthenticated
     public bool IsAuthenticated()
     {
         return _httpClient.DefaultRequestHeaders.Authorization != null;
     }
 
+    // Helper to set the Authorization header for HttpClient
     private void SetAuthorizationHeader(string token)
     {
         if (string.IsNullOrEmpty(token))
