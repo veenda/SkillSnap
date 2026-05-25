@@ -77,3 +77,28 @@ The process of securely storing, using, and managing tokens on the client side t
 Copilot Security support
 - Prompts help develop endpoints and validate logic
 - Copilot suggest improvements and error handling for auth flow
+
+|| Part 4
+
+Caching
+A technique used to temporarity store frequently accessed data in memory to reduce the need for repreted database queries and improve repsonse time
+- Uses IMemoryCache to store frequently requested data
+- Reduces calls to the database
+
+Query Optimmization
+The process of improving the efficiency and performance of database queries by minimizing resource usage and execution time
+- Use .AsNoTracking() to skip unnecessary change tracking
+- Use .Include() to load related data efficiently
+
+State management
+The technique of managing user or application state across different component or pages, particulary in client-side application like Blazor
+- Store user-specific data like role or ID a shared service such as UserSessionService
+- Keep state available across components without server reliance
+
+Performance Monitoring
+- Use tools like Stopwatch to measure request time
+- Log cache hits and misses to track effectiveness
+
+Microsoft Copilot
+- Use prompts to scaffold caching logic or suggest query tuning
+- Copilot helps highlight areas that impact performance
