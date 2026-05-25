@@ -25,9 +25,10 @@ public class ProjectsController : ControllerBase
     {
         if (!_cache.TryGetValue("project_list", out List<Project> projects))
         {
+            // In-Memory Caching
             projects = await _context.Projects
-                .Include(p => p.PortfolioUser)
-                .AsNoTracking()
+                .Include(p => p.PortfolioUser) // Reduce round-trips for related data
+                .AsNoTracking() // Updates aren't required
                 .Select(p => new Project
                 {
                     Id = p.Id,

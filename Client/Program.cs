@@ -12,13 +12,15 @@ builder.Services.AddScoped<ProfileService>();
 builder.Services.AddScoped<ProjectService>();
 builder.Services.AddScoped<SkillService>();
 builder.Services.AddScoped<AuthService>();
+builder.Services.AddScoped<UserSessionService>();
 
 builder.Services.AddAuthorizationCore();
 builder.Services.AddScoped<AuthenticationStateProvider, AuthStateProvider>(); 
 builder.Services.AddScoped<AuthService>();
 
-builder.Services.AddScoped(sp => new HttpClient {
-    BaseAddress = new Uri("http://localhost:5062/")
+builder.Services.AddScoped(sp => new HttpClient
+{ 
+    BaseAddress = new Uri(builder.HostEnvironment.BaseAddress)
 });
 
 var host = builder.Build();
@@ -26,5 +28,4 @@ var host = builder.Build();
 var authService = host.Services.GetRequiredService<AuthService>();
 await authService.InitializeAuthStateAsync();
 
-// start the application
 await host.RunAsync();

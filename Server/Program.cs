@@ -20,6 +20,9 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
     .AddEntityFrameworkStores<SkillSnapContext>()
     .AddDefaultTokenProviders();
 
+// Register Add In-Memory Caching to the API
+builder.Services.AddMemoryCache();
+
 // Configure JWT Authentication
 var jwtKey = builder.Configuration["Jwt:Key"] ?? "your-secret-key-change-this-in-production";
 var jwtIssuer = builder.Configuration["Jwt:Issuer"] ?? "SkillSnap";
