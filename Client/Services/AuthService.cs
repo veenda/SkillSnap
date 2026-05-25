@@ -1,6 +1,7 @@
 using SkillSnap.Shared.Models;
 using System.Net.Http.Json;
 using System.Security.Claims;
+using System.IdentityModel.Tokens.Jwt;
 using Microsoft.JSInterop;
 using Microsoft.AspNetCore.Components.Authorization;
 
@@ -11,13 +12,19 @@ public class AuthService
     private readonly HttpClient _httpClient;
     private readonly IJSRuntime _jsRuntime;
     private readonly AuthenticationStateProvider _authStateProvider;
+    private readonly IUserStateService _userStateService;
     private const string TokenKey = "jwt_token";
 
-    public AuthService(HttpClient httpClient, IJSRuntime jsRuntime, AuthenticationStateProvider authStateProvider)
+    public AuthService(
+        HttpClient httpClient, 
+        IJSRuntime jsRuntime, 
+        AuthenticationStateProvider authStateProvider,
+        IUserStateService userStateService)
     {
         _httpClient = httpClient;
         _jsRuntime = jsRuntime;
         _authStateProvider = authStateProvider;
+        _userStateService = userStateService;
     }
 
     // RegisterAsync
@@ -37,6 +44,7 @@ public class AuthService
                 {
                     await _jsRuntime.InvokeVoidAsync("localStorage.setItem", TokenKey, result.Token);
                     SetAuthorizationHeader(result.Token);
+                    ExtractAndSetUserInfo(result.Token);
                     ((AuthStateProvider)_authStateProvider).MarkUserAsAuthenticated(model.Email);
                 }
                 return result;
@@ -70,6 +78,7 @@ public class AuthService
                 {
                     await _jsRuntime.InvokeVoidAsync("localStorage.setItem", TokenKey, result.Token);
                     SetAuthorizationHeader(result.Token);
+                    ExtractAndSetUserInfo(result.Token);
                     ((AuthStateProvider)_authStateProvider).MarkUserAsAuthenticated(model.Email);
                 }
                 return result;
@@ -88,6 +97,7 @@ public class AuthService
     {
         await _jsRuntime.InvokeVoidAsync("localStorage.removeItem", TokenKey);
         SetAuthorizationHeader(string.Empty);
+        _userStateService.ClearSession();
         ((AuthStateProvider)_authStateProvider).MarkUserAsLoggedOut();
     }
 
@@ -98,6 +108,7 @@ public class AuthService
         if (!string.IsNullOrEmpty(token))
         {
             SetAuthorizationHeader(token);
+            ExtractAndSetUserInfo(token);
         }
     }
 
@@ -115,6 +126,32 @@ public class AuthService
         {
             _httpClient.DefaultRequestHeaders.Authorization =
                 new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+        }
+    }
+
+    // Helper to extract user info from JWT token
+    private void ExtractAndSetUserInfo(string token)
+    {
+        try
+        {
+            var handler = new JwtSecurityTokenHandler();
+            var jwtToken = handler.ReadToken(token) as JwtSecurityToken;
+
+            if (jwtToken != null)
+            {
+                var userId = jwtToken.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+                var email = jwtToken.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+                var role = jwtToken.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value ?? "User";
+
+                if (!string.IsNullOrEmpty(userId) && !string.IsNullOrEmpty(email))
+                {
+                    _userStateService.SetUser(userId, email, role, jwtToken.ValidTo);
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine($"Error extracting user info from token: {ex.Message}");
         }
     }
 }

@@ -55,14 +55,22 @@ public class ProjectsController : ControllerBase
     [HttpGet("{id}")]
     public async Task<ActionResult<Project>> GetProject(int id)
     {
-        var project = await _context.Projects
-            .Include(p => p.PortfolioUser)
-            .AsNoTracking()
-            .FirstOrDefaultAsync(p => p.Id == id);
-
-        if (project == null)
+        var cacheKey = $"project_{id}";
+        
+        if (!_cache.TryGetValue(cacheKey, out Project? project))
         {
-            return NotFound();
+            project = await _context.Projects
+                .Include(p => p.PortfolioUser)
+                .AsNoTracking()
+                .FirstOrDefaultAsync(p => p.Id == id);
+
+            if (project == null)
+            {
+                return NotFound();
+            }
+
+            _cache.Set(cacheKey, project, new MemoryCacheEntryOptions()
+                .SetSlidingExpiration(TimeSpan.FromMinutes(5)));
         }
 
         return Ok(project);

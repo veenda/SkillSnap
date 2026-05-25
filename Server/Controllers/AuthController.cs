@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using SkillSnap.Server.Data;
 using SkillSnap.Shared.Models;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -74,7 +75,7 @@ public class AuthController : ControllerBase
         return Ok(new { token, email = user.Email, message = "Login successful." });
     }
 
-    private string GenerateJwtToken(ApplicationUser user)
+    private async Task<string> GenerateJwtToken(ApplicationUser user)
     {
         var jwtKey = _configuration["Jwt:Key"] ?? "your-secret-key-change-this-in-production";
         var jwtIssuer = _configuration["Jwt:Issuer"] ?? "SkillSnap";
@@ -83,17 +84,23 @@ public class AuthController : ControllerBase
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey));
         var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-        var claims = new[]
+        var claimsList = new List<Claim>
         {
             new Claim(ClaimTypes.NameIdentifier, user.Id),
             new Claim(ClaimTypes.Email, user.Email ?? string.Empty),
             new Claim(ClaimTypes.Name, user.UserName ?? string.Empty)
         };
 
+        var roles = await _userManager.GetRolesAsync(user);
+        foreach (var role in roles)
+        {
+            claimsList.Add(new Claim(ClaimTypes.Role, role));
+        }
+
         var token = new JwtSecurityToken(
             issuer: jwtIssuer,
             audience: jwtAudience,
-            claims: claims,
+            claims: claimsList,
             expires: DateTime.UtcNow.AddHours(1),
             signingCredentials: credentials);
 

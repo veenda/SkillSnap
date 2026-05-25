@@ -12,6 +12,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 builder.Services.AddMemoryCache();
+builder.Services.AddScoped<ICacheService, CacheService>();
 
 builder.Services.AddDbContext<SkillSnapContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -19,9 +20,6 @@ builder.Services.AddDbContext<SkillSnapContext>(options =>
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
     .AddEntityFrameworkStores<SkillSnapContext>()
     .AddDefaultTokenProviders();
-
-// Register Add In-Memory Caching to the API
-builder.Services.AddMemoryCache();
 
 // Configure JWT Authentication
 var jwtKey = builder.Configuration["Jwt:Key"] ?? "your-secret-key-change-this-in-production";

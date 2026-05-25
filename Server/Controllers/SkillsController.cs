@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using SkillSnap.Server.Data;
 using SkillSnap.Shared.Models;
+using System.Diagnostics;
 
 namespace SkillSnap.Server.Controllers;
 
@@ -58,14 +59,22 @@ public class SkillsController : ControllerBase
     [HttpGet("{id}")]
     public async Task<ActionResult<Skill>> GetSkill(int id)
     {
-        Skill? skill = await _context.Skills
-            .Include(s => s.PortfolioUser)
-            .AsNoTracking()
-            .FirstOrDefaultAsync(s => s.Id == id);
-
-        if (skill == null)
+        var cacheKey = $"skill_{id}";
+        
+        if (!_cache.TryGetValue(cacheKey, out Skill? skill))
         {
-            return NotFound();
+            skill = await _context.Skills
+                .Include(s => s.PortfolioUser)
+                .AsNoTracking()
+                .FirstOrDefaultAsync(s => s.Id == id);
+
+            if (skill == null)
+            {
+                return NotFound();
+            }
+
+            _cache.Set(cacheKey, skill, new MemoryCacheEntryOptions()
+                .SetSlidingExpiration(TimeSpan.FromMinutes(5)));
         }
 
         return Ok(skill);
