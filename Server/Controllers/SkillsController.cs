@@ -23,6 +23,8 @@ public class SkillsController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Skill>>> GetSkills()
     {
+        var sw = Stopwatch.StartNew(); // Start timer
+
         if (!_cache.TryGetValue("skill_list", out List<Skill> skills))
         {
             skills = await _context.Skills
@@ -45,9 +47,11 @@ public class SkillsController : ControllerBase
                 .ToListAsync();
 
             _cache.Set("skill_list", skills, new MemoryCacheEntryOptions()
-                .SetSlidingExpiration(TimeSpan.FromMinutes(5)));
+                .SetSlidingExpiration(TimeSpan.FromMinutes(5)));      
         }
 
+        sw.Stop(); // Stop timer
+        Debug.WriteLine($"GetSkills took {sw.ElapsedMilliseconds} ms");
         return Ok(skills);
     }
 
