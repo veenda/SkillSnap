@@ -26,11 +26,13 @@ public class AuthService
         try
         {
             var response = await _httpClient.PostAsJsonAsync("api/auth/register", model);
+            var content = await response.Content.ReadAsStringAsync();
+
             if (response.IsSuccessStatusCode)
             {
-                var jsonContent = await response.Content.ReadAsStringAsync();
-                var result = System.Text.Json.JsonSerializer.Deserialize<AuthResponse>(jsonContent, 
+                var result = System.Text.Json.JsonSerializer.Deserialize<AuthResponse>(content, 
                     new System.Text.Json.JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                
                 if (result?.Token != null)
                 {
                     await _jsRuntime.InvokeVoidAsync("localStorage.setItem", TokenKey, result.Token);
@@ -39,12 +41,17 @@ public class AuthService
                 }
                 return result;
             }
-            return null;
+            else
+            {
+                var errorContent = await response.Content.ReadAsStringAsync();
+                Console.Error.WriteLine($"Registration failed: {errorContent}");
+                return new AuthResponse { Message = "Registration failed. Please try again." };
+            }
         }
         catch (Exception ex)
         {
             Console.Error.WriteLine($"Register error: {ex.Message}");
-            return null;
+            return new AuthResponse { Message = "An error occurred during registration. Please try again." };
         }
     }
 
@@ -56,8 +63,8 @@ public class AuthService
             var response = await _httpClient.PostAsJsonAsync("api/auth/login", model);
             if (response.IsSuccessStatusCode)
             {
-                var jsonContent = await response.Content.ReadAsStringAsync();
-                var result = System.Text.Json.JsonSerializer.Deserialize<AuthResponse>(jsonContent,
+                var content = await response.Content.ReadAsStringAsync();
+                var result = System.Text.Json.JsonSerializer.Deserialize<AuthResponse>(content,
                     new System.Text.Json.JsonSerializerOptions { PropertyNameCaseInsensitive = true });
                 if (result?.Token != null)
                 {
@@ -67,12 +74,12 @@ public class AuthService
                 }
                 return result;
             }
-            return null;
+            return new AuthResponse { Message = "Invalid email or password." };
         }
         catch (Exception ex)
         {
             Console.Error.WriteLine($"Login error: {ex.Message}");
-            return null;
+            return new AuthResponse { Message = "An error occurred during login. Please try again." };
         }
     }
 

@@ -7,7 +7,7 @@
 <div class="container mt-4">
     @if (isLoading)
     {
-        <p><em>Loading your profile...</em></p>
+        <p><em>Loading...</em></p>
     }
     else if (profile != null)
     {
@@ -17,12 +17,7 @@
     }
     else
     {
-        <div class="alert alert-info">
-            Welcome to SkillSnap! Please create your profile to get started.
-        </div>
-        <button class="btn btn-primary" @onclick='() => NavigationManager.NavigateTo("/profile")'>
-            Create Profile
-        </button>
+        <p>No profile available.</p>
     }
 </div>
 

@@ -15,29 +15,20 @@ public class AuthStateProvider : AuthenticationStateProvider
 
     public override async Task<AuthenticationState> GetAuthenticationStateAsync()
     {
-        if (_jsRuntime == null)
-        {
-            return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
-        }
         try
         {
-            var token = await _jsRuntime.InvokeAsync<string>("localStorage.getItem", "authToken");
+            var token = await _jsRuntime.InvokeAsync<string>("localStorage.getItem", "jwt_token");
 
             if (string.IsNullOrEmpty(token))
             {
-                // No token, user is not authenticated
                 return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
             }
 
-            // In a real application, you would validate the token and extract claims here
-            var claims = new[] { new Claim(ClaimTypes.Name, "User") };
-            var identity = new ClaimsIdentity(claims, "jwt");
-            var user = new ClaimsPrincipal(identity);
-
-            return new AuthenticationState(user);
+            return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity(ParseClaimsFromJwt(token), "jwt")));
         }
-        catch (Exception)
+        catch (Exception ex)
         {
+            Console.Error.WriteLine($"AuthStateProvider Error: {ex.Message}");
             return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
         }
     }

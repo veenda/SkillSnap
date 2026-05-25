@@ -2,18 +2,17 @@
     <Router AppAssembly="@typeof(App).Assembly">
         <Found Context="routeData">
             <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
-                <Authorizing>
-                    <p>Authorizing...</p>
-                </Authorizing>
                 <NotAuthorized>
-                    <p>You are not authorized to view this page. <a href="/login">Login here</a></p>
+                    <p>You are not authorized to view this page. Please <a href="/login">login here</a>.</p>
                 </NotAuthorized>
             </AuthorizeRouteView>
-            <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
             <FocusOnNavigate RouteData="@routeData" Selector="h1" />
         </Found>
         <NotFound>
-            <p>Sorry, the page you are looking for does not exist.</p>
+            <PageTitle>Page Not Found</PageTitle>
+            <LayoutView Layout="@typeof(MainLayout)">
+                <p>Sorry, the page you are looking for does not exist.</p>
+            </LayoutView>
         </NotFound>
     </Router>
 </CascadingAuthenticationState>

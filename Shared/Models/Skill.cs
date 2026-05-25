@@ -14,8 +14,8 @@ namespace SkillSnap.Shared.Models
         public int Id { get; set; }
 
         [Required]
-        public string Name { get; set; }
-        public string Level { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public string Level { get; set; } = string.Empty;
 
         [ForeignKey("PortfolioUser")]
         public int PortfolioUserId { get; set; }
