@@ -1,0 +1,59 @@
+@page "/complete-profile"
+@attribute [Authorize]
+@using System.ComponentModel.DataAnnotations
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm border-0 rounded-3">
+                <div class="card-body p-4">
+                    <h3 class="fw-bold text-primary mb-2">Complete Your Profile</h3>
+                    <p class="text-muted mb-4">Let people know who you are. (You can change this later!)</p>
+
+                    <EditForm Model="profileModel" OnValidSubmit="SaveProfile">
+                        <DataAnnotationsValidator />
+
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Full Name *</label>
+                            <InputText class="form-control bg-light border-0" @bind-Value="profileModel.Name" placeholder="e.g. Jane Doe" />
+                            <ValidationMessage For="() => profileModel.Name" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Professional Title (Optional)</label>
+                            <InputText class="form-control bg-light border-0" @bind-Value="profileModel.Title" placeholder="e.g. Fullstack Developer" />
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label fw-semibold">Short Bio (Optional)</label>
+                            <InputTextArea class="form-control bg-light border-0" @bind-Value="profileModel.Bio" rows="3" placeholder="Tell us about yourself..." />
+                        </div>
+
+                        <button type="submit" class="btn btn-success w-100 rounded-pill fw-bold">Save and Continue</button>
+                    </EditForm>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private UserProfileForm profileModel = new UserProfileForm();
+
+    private async Task SaveProfile()
+    {
+        // TODO: In the future, we will call ProfileService.UpdateProfileAsync(profileModel) here!
+        Console.WriteLine($"Saved: {profileModel.Name}");
+        
+        // Redirect to their actual profile view
+        NavigationManager.NavigateTo("/profile");
+    }
+
+    public class UserProfileForm
+    {
+        [Required(ErrorMessage = "We need to know what to call you!")]
+        public string Name { get; set; } = string.Empty;
+        public string? Title { get; set; }
+        public string? Bio { get; set; }
+    }
+}
