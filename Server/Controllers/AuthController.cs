@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using SkillSnap.Server.Data;
 using SkillSnap.Shared.Models;
@@ -13,15 +14,18 @@ namespace SkillSnap.Server.Controllers;
 [Route("api/[controller]")]
 public class AuthController : ControllerBase
 {
+    private readonly SkillSnapContext _context;
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly SignInManager<ApplicationUser> _signInManager;
     private readonly IConfiguration _configuration;
 
     public AuthController(
+        SkillSnapContext context,
         UserManager<ApplicationUser> userManager,
         SignInManager<ApplicationUser> signInManager,
         IConfiguration configuration)
     {
+        _context = context;
         _userManager = userManager;
         _signInManager = signInManager;
         _configuration = configuration;
@@ -48,19 +52,26 @@ public class AuthController : ControllerBase
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginModel model)
     {
-        var user = await _userManager.FindByEmailAsync(model.Email);
+        var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == model.Email);
+
         if (user == null)
-            return Unauthorized(new { message = "Invalid credentials." });
-
-        var result = await _signInManager.PasswordSignInAsync(user, model.Password, false, false);
-
-        if (result.Succeeded)
         {
-            var token = GenerateJwtToken(user);
-            return Ok(new { token, email = user.Email, message = "Login successful." });
+            return Unauthorized(new
+            { 
+                message = "Invalid email or password." 
+            });
+        }
+        
+        if (!VerifyPassword(user, model.Password))
+        {
+            return Unauthorized(new
+            {
+                message = "Invalid email or password."
+            });
         }
 
-        return Unauthorized(new { message = "Invalid credentials." });
+        var token = GenerateJwtToken(user);
+        return Ok(new { token, email = user.Email, message = "Login successful." });
     }
 
     private string GenerateJwtToken(ApplicationUser user)
@@ -87,5 +98,12 @@ public class AuthController : ControllerBase
             signingCredentials: credentials);
 
         return new JwtSecurityTokenHandler().WriteToken(token);
+    }
+
+    private bool VerifyPassword(ApplicationUser user, string password)
+    {
+        var passwordHasher = new PasswordHasher<ApplicationUser>();
+        var result = passwordHasher.VerifyHashedPassword(user, user.PasswordHash ?? string.Empty, password);
+        return result == PasswordVerificationResult.Success;
     }
 }

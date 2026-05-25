@@ -54,7 +54,7 @@ public class SkillsController : ControllerBase
     [HttpGet("{id}")]
     public async Task<ActionResult<Skill>> GetSkill(int id)
     {
-        var skill = await _context.Skills
+        Skill? skill = await _context.Skills
             .Include(s => s.PortfolioUser)
             .AsNoTracking()
             .FirstOrDefaultAsync(s => s.Id == id);
@@ -71,8 +71,13 @@ public class SkillsController : ControllerBase
 
     [Authorize(Roles = "Admin")]
     [HttpPost]
-    public async Task<ActionResult<Skill>> AddSkill([FromBody] Skill skill)
+    public async Task<ActionResult<Skill>> AddSkill([FromBody] Skill? skill)
     {
+        if (skill == null)
+        {
+            return BadRequest();
+        }
+
         _context.Skills.Add(skill);
         await _context.SaveChangesAsync();
         _cache.Remove("skill_list");
@@ -82,8 +87,13 @@ public class SkillsController : ControllerBase
 
     [Authorize(Roles = "Admin")]
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateSkill(int id, [FromBody] Skill skill)
+    public async Task<IActionResult> UpdateSkill(int id, [FromBody] Skill? skill)
     {
+        if (skill == null)
+        {
+            return BadRequest();
+        }
+
         if (id != skill.Id)
         {
             return BadRequest();

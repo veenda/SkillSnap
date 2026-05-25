@@ -1,9 +1,48 @@
 ﻿@page "/"
+@using SkillSnap.Client.Services
+@using SkillSnap.Shared.Models
+@inject ProfileService ProfileService
+@inject NavigationManager NavigationManager
 
-<PageTitle>Index</PageTitle>
+<div class="container mt-4">
+    @if (isLoading)
+    {
+        <p><em>Loading your profile...</em></p>
+    }
+    else if (profile != null)
+    {
+        <ProfileCard Name="@profile.Name" 
+                     ImageUrl="@profile.ProfileImageUrl" 
+                     Bio="@profile.Bio" />
+    }
+    else
+    {
+        <div class="alert alert-info">
+            Welcome to SkillSnap! Please create your profile to get started.
+        </div>
+        <button class="btn btn-primary" @onclick='() => NavigationManager.NavigateTo("/profile")'>
+            Create Profile
+        </button>
+    }
+</div>
 
-<h1>Hello, world!</h1>
+@code {
+    private PortfolioUser? profile;
+    private bool isLoading = true;
 
-Welcome to your new app.
-
-<SurveyPrompt Title="How is Blazor working for you?" />
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            profile = await ProfileService.GetProfileAsync();
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine(ex.Message);
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+}

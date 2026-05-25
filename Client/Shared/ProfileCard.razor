@@ -2,7 +2,8 @@
     <div class="card-body text-center">
         <img src="@(string.IsNullOrWhiteSpace(ImageUrl) ? DefaultImage : ImageUrl)"
              alt="Profile image of @Name"
-             class="profile-avatar mb-3" />
+             class="profile-avatar mb-3" 
+             style="width: 150px; height: 150px; border-radius: 50%;" />
         <h5 class="card-title mb-2">@Name</h5>
         <p class="card-text text-muted">@Bio</p>
     </div>
